@@ -31,7 +31,7 @@ router.post('/create-checkout-session', express.json(), async (req, res) => {
       {
         shipping_rate_data: {
           type: 'fixed_amount',
-          fixed_amount: { amount: 0, currency: 'usd' },
+          fixed_amount: { amount: 840, currency: 'usd' },
           display_name: 'US Standard Shipping',
           delivery_estimate: { minimum: { unit: 'business_day', value: 3 }, maximum: { unit: 'business_day', value: 5 } },
         },

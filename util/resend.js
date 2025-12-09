@@ -10,7 +10,7 @@ async function sendOrderConfirmation({ to, name, confirmationNumber, productIds 
     const products = await Product.find({ _id: { $in: productIds } });
 
     const productHtml = products.map(p => `
-  <a href="http://localhost:5173/archive/products/${p.id}" style="text-decoration:none; color:inherit; display:block; margin-bottom:10px;">
+  <a href="${process.env.FRONTEND_URL}/archive/products/${p.id}" style="text-decoration:none; color:inherit; display:block; margin-bottom:10px;">
   <div>
     <img src="${p.images[0]}" alt="${p.name}" style="width:100px; height:133px; display:block;">
     <p style="font-size:12px; color:#888888; font-weight:300;">${p.name}</p>

@@ -64,12 +64,12 @@ router.post("",
         }
       }
 
-//       await sendOrderConfirmation({
-//       to: session.customer_details?.email,
-//       name: session.customer_details?.name,
-//       confirmationNumber: confirmationNumber,
-//       productIds: productIds,
-// });
+       await sendOrderConfirmation({
+       to: session.customer_details?.email,
+       name: session.customer_details?.name,
+       confirmationNumber: confirmationNumber,
+       productIds: productIds,
+ });
     }
 
     res.status(200).send('ok');

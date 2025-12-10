@@ -14,6 +14,7 @@ const authRouter = require("./routes/auth");
 const stripeRouter = require("./routes/stripe");
 const webhookRouter = require("./routes/webhook");
 const contactRouter = require("./routes/contact");
+const orderRouter = require("./routes/order")
 const { verifyToken, isAdmin } = require("./middleware/auth-middleware");
 
 app.use(cors());
@@ -22,7 +23,10 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: [
+      process.env.FRONTEND_URL,
+      process.env.FRONTEND_URL_LOCAL
+    ],
     methods: "GET,POST",
     credentials: true,
   })
@@ -39,6 +43,7 @@ app.use("/customer", customerRouter); // , verifyToken,
 app.use("/auth", authRouter);
 app.use("/api/stripe", stripeRouter);
 app.use("/contact", contactRouter);
+app.use("/order", orderRouter);
 
 async function connectDB() {
   mongoose.connect(process.env.MONGODB_URI, {

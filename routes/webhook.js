@@ -37,7 +37,6 @@ router.post("",
 
       const newOrder = new Order({
         confirmationNumber: confirmationNumber,
-        purchaserName: session.customer_details?.name,
         productIds: productIds,
         datePurchased: new Date(),
         purchaserName: session.customer_details?.name,
@@ -50,7 +49,9 @@ router.post("",
         dateShipped: null,
         trackingNumber: null,
         trackingProvider: null,
+        trackingUrl: null,
         dateDelivered: null,
+        isHandDelivered: false
       });
 
       await newOrder.save();
@@ -64,12 +65,7 @@ router.post("",
         }
       }
 
-       await sendOrderConfirmation({
-       to: session.customer_details?.email,
-       name: session.customer_details?.name,
-       confirmationNumber: confirmationNumber,
-       productIds: productIds,
- });
+       await sendOrderConfirmation(newOrder);
     }
 
     res.status(200).send('ok');

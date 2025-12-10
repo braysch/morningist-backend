@@ -13,7 +13,9 @@ const orderSchema = new mongoose.Schema({
     addressPostalCode: String,
     trackingNumber: String,
     trackingProvider: String,
+    trackingUrl: String,
     dateDelivered: Date,
+    isHandDelivered: Boolean
 });
 const Order = mongoose.model('orders', orderSchema);
 module.exports = Order;

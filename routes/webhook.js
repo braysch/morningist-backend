@@ -52,7 +52,8 @@ router.post("",
         trackingProvider: null,
         trackingUrl: null,
         dateDelivered: null,
-        isHandDelivered: false
+        isHandDelivered: false,
+        shippingCost: null
       });
 
       const savedOrder = await newOrder.save();

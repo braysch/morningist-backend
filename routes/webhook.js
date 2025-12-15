@@ -5,6 +5,7 @@ const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 const Order = require('../db/order');
 const Product = require('../db/product');
 const { sendOrderConfirmation } = require('../util/resend');
+const { sendTelegramMessage } = require('../handlers/telegram-handler');
 
 router.post("",
   express.raw({ type: 'application/json' }), // ⚠️ raw body required
@@ -54,8 +55,16 @@ router.post("",
         isHandDelivered: false
       });
 
-      await newOrder.save();
+      const savedOrder = await newOrder.save();
       console.log('✅ Order saved to database:', newOrder);
+
+      const telegramMessage = `
+      🛒 <b>New Purchase!</b>
+
+      <b>Name:</b> ${session.customer_details?.name}
+      <b>Order #:</b> <a href="https://www.morningist.com/admin/orders/${savedOrder._id}">${confirmationNumber}</a>
+      <b>Total:</b> $${(session.amount_total / 100).toFixed(2)}
+      `
 
       if (session.metadata.productIds) {
         for (const productId of productIds) {
@@ -65,7 +74,8 @@ router.post("",
         }
       }
 
-       await sendOrderConfirmation(newOrder);
+      await sendTelegramMessage(telegramMessage);
+      await sendOrderConfirmation(newOrder);
     }
 
     res.status(200).send('ok');

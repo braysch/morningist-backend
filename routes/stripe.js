@@ -51,7 +51,14 @@ router.get("/checkout-session", async (req, res) => {
   if (!sessionId) return res.status(400).send("No session ID");
 
   const session = await stripe.checkout.sessions.retrieve(sessionId);
-  res.json(session);
+  
+  // Return only necessary information, hide sensitive payment details
+  res.json({
+    id: session.id,
+    payment_status: session.payment_status,
+    customer_email: session.customer_details.email,
+    metadata: session.metadata
+  });
 });
 
 module.exports = router;

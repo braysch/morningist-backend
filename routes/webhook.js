@@ -75,8 +75,18 @@ router.post("",
         }
       }
 
-      await sendTelegramMessage(telegramMessage);
-      await sendOrderConfirmation(newOrder);
+      try {
+        await sendTelegramMessage(telegramMessage);
+      } catch (err) {
+        console.error('Error sending Telegram message:', err);
+      }
+
+      try {
+        await sendOrderConfirmation(newOrder);
+        console.log('✅ Order confirmation email sent successfully');
+      } catch (err) {
+        console.error('❌ Error sending order confirmation email:', err);
+      }
     }
 
     res.status(200).send('ok');

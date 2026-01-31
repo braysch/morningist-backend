@@ -9,9 +9,10 @@ const {
   deleteOrder,
 } = require("../handlers/order-handler");
 const { sendShippingConfirmation } = require("../util/resend");
+const { verifyToken, isAdmin } = require("../middleware/auth-middleware");
 
-// GET all orders
-router.get("/", async (req, res) => {
+// GET all orders - ADMIN ONLY
+router.get("/", verifyToken, isAdmin, async (req, res) => {
     //console.log("Getting ORDERS");
   try {
     const orders = await getOrders();
@@ -22,8 +23,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET single order
-router.get("/:id", async (req, res) => {
+// GET single order - ADMIN ONLY
+router.get("/:id", verifyToken, isAdmin, async (req, res) => {
   try {
     const order = await getOrderById(req.params.id);
     if (!order) return res.status(404).json({ error: "Order not found" });
@@ -45,8 +46,8 @@ router.post("/", async (req, res) => {
   }
 });
 
-// UPDATE order
-router.put("/:id", async (req, res) => {
+// UPDATE order - ADMIN ONLY
+router.put("/:id", verifyToken, isAdmin, async (req, res) => {
 
   try {
     await updateOrder(req.params.id, req.body);
@@ -57,8 +58,8 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Send Email
-router.post("/resend/:id", async (req, res) => {
+// Send Email - ADMIN ONLY
+router.post("/resend/:id", verifyToken, isAdmin, async (req, res) => {
 
   try {
     await sendShippingConfirmation(req.body);
@@ -69,8 +70,8 @@ router.post("/resend/:id", async (req, res) => {
   }
 });
 
-// DELETE order
-router.delete("/:id", async (req, res) => {
+// DELETE order - ADMIN ONLY
+router.delete("/:id", verifyToken, isAdmin, async (req, res) => {
   try {
     await deleteOrder(req.params.id);
     res.json({ success: true });

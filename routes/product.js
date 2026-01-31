@@ -2,14 +2,15 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../db/product');
 const { addProduct, updateProduct, deleteProduct } = require('../handlers/product-handler');
+const { verifyToken, isAdmin } = require('../middleware/auth-middleware');
 
-router.post("", async (req, res) => {
+router.post("", verifyToken, isAdmin, async (req, res) => {
     let model = req.body;
     let result = await addProduct(model);
     res.send(result);
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken, isAdmin, async (req, res) => {
     let model = req.body;
     let id = req.params['id'];
     let result = await updateProduct(id, model);
@@ -37,7 +38,7 @@ router.get("/:id", async (req, res) => {
     res.send(result);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, isAdmin, async (req, res) => {
     let id = req.params['id'];
     await deleteProduct(id);
     return res.send({ message: "Product deleted successfully" });
